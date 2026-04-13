@@ -1,7 +1,7 @@
 -- =========================
 -- MAJOR
 -- =========================
-INSERT INTO Major (major_id, major_name, degree_type, credit_minimum) VALUES
+INSERT INTO Major (major_id, major_name, degree_type, total_credits_required) VALUES
 (1, 'Computer Science', 'BS', 120),
 (2, 'Mathematics', 'BS', 120),
 (3, 'Biology', 'BS', 120);
