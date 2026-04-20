@@ -1,7 +1,7 @@
 <?php
 // Database connection using typical local XAMPP credentials
 $host = 'localhost';
-$dbname = 'pvamu_registration'; // Ensure this matches your local database name
+$dbname = 'pvamu_registration'; // Ensure this matches your local XAMPP database name
 $username = 'root';
 $password = '';
 
