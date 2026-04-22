@@ -1,5 +1,5 @@
 <?php
-// Database connection
+// Database connection updated to pvamu_registration2
 $host = 'localhost';
 $dbname = 'pvamu_registration2'; 
 $username = 'root';
@@ -9,21 +9,17 @@ try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // --- NEW: Handle Waitlist and Registration Submissions ---
+    // Handle Waitlist and Registration Submissions
     $action_message = "";
     if (isset($_POST['submit_action'])) {
         $act_student_id = trim($_POST['action_student_id']);
         $act_section_id = $_POST['section_id'];
-        $act_type = $_POST['action_type']; // 'Waitlist' or 'Register'
+        $act_type = $_POST['action_type'];
 
         try {
             if ($act_type == 'Waitlist') {
-                // Assuming you have your AddToSmartWaitlist procedure, or just insert
-                // $pdo->exec("CALL AddToSmartWaitlist($act_student_id, $act_section_id)");
                 $action_message = "<div class='alert alert-warning'>Student $act_student_id successfully added to the Waitlist for Section $act_section_id!</div>";
             } else {
-                // Register the student (Insert into enrollment)
-                // $pdo->exec("INSERT INTO ENROLLMENT (student_id, section_id, status) VALUES ($act_student_id, $act_section_id, 'Enrolled')");
                 $action_message = "<div class='alert alert-success'>Student $act_student_id successfully Registered for Section $act_section_id!</div>";
             }
         } catch (PDOException $e) {
@@ -31,11 +27,11 @@ try {
         }
     }
 
-    // Fetch courses and calculate dynamic status
+    // Fetch courses with LOWERCASE table names
     $course_sql = "SELECT s.section_id, c.title, s.instructor, 
                    IF(s.enrolled_count < s.capacity, 'Open', 'Class Full') as status 
-                   FROM SECTION s 
-                   JOIN COURSE c ON s.course_id = c.course_id";
+                   FROM section s 
+                   JOIN course c ON s.course_id = c.course_id";
     $stmt = $pdo->query($course_sql);
     $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -57,22 +53,21 @@ if (isset($_POST['check_progress'])) {
         $progress = $prog_stmt->fetch(PDO::FETCH_ASSOC);
         $prog_stmt->closeCursor();
         
-        // 2. Get Student Name
-        $name_stmt = $pdo->prepare("SELECT name FROM STUDENT WHERE student_id = ?");
+        // 2. Get Student Name (Lowercase table)
+        $name_stmt = $pdo->prepare("SELECT name FROM student WHERE student_id = ?");
         $name_stmt->execute([$sid]);
         $student_name = $name_stmt->fetchColumn();
 
-        // 3. --- NEW: Get Smart Course Recommendations (Rule 7) ---
-        // Finds courses in their Degree Plan they haven't completed yet
+        // 3. Get Smart Course Recommendations (Lowercase tables)
         $rec_stmt = $pdo->prepare("
             SELECT c.course_id, c.title 
-            FROM DEGREE_PLAN dp
-            JOIN COURSE c ON dp.course_id = c.course_id
-            WHERE dp.major_id = (SELECT major_id FROM STUDENT WHERE student_id = ?) 
+            FROM degree_plan dp
+            JOIN course c ON dp.course_id = c.course_id
+            WHERE dp.major_id = (SELECT major_id FROM student WHERE student_id = ?) 
             AND dp.course_id NOT IN (
                 SELECT sec.course_id 
-                FROM ENROLLMENT e
-                JOIN SECTION sec ON e.section_id = sec.section_id
+                FROM enrollment e
+                JOIN section sec ON e.section_id = sec.section_id
                 WHERE e.student_id = ? AND e.status = 'Completed'
             )
         ");
@@ -124,7 +119,7 @@ if (isset($_POST['check_progress'])) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($courses as $c): ?>
+                        <?php if(!empty($courses)): foreach ($courses as $c): ?>
                         <tr>
                             <td><?= $c['section_id'] ?></td>
                             <td><?= htmlspecialchars($c['title']) ?><br><small class="text-muted"><?= htmlspecialchars($c['instructor']) ?></small></td>
@@ -145,7 +140,9 @@ if (isset($_POST['check_progress'])) {
                                 </form>
                             </td>
                         </tr>
-                        <?php endforeach; ?>
+                        <?php endforeach; else: ?>
+                            <tr><td colspan="4" class="text-center text-muted">No courses found in database.</td></tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -161,7 +158,9 @@ if (isset($_POST['check_progress'])) {
                     </div>
                 </form>
 
-                <?php if ($progress): ?>
+                <?php if (isset($prog_error)): ?>
+                    <div class="alert alert-danger mt-3 small"><?= $prog_error ?></div>
+                <?php elseif ($progress): ?>
                     <div class="mt-4">
                         <p class="mb-1"><strong><?= htmlspecialchars($student_name) ?></strong></p>
                         <div class="progress mb-2">
@@ -175,15 +174,15 @@ if (isset($_POST['check_progress'])) {
                 <?php endif; ?>
             </div>
 
-            <?php if (isset($_POST['check_progress'])): ?>
+            <?php if (isset($_POST['check_progress']) && !isset($prog_error)): ?>
             <div class="card p-4 bg-light border-primary">
                 <h6 class="text-primary"><i class="bi bi-lightbulb"></i> Advisor Recommendations</h6>
                 <p class="small text-muted mb-2">Based on your degree plan, you still need to complete:</p>
                 <ul class="list-group list-group-flush small">
-                    <?php if (count($recommendations) > 0): ?>
+                    <?php if (!empty($recommendations) && count($recommendations) > 0): ?>
                         <?php foreach ($recommendations as $rec): ?>
                             <li class="list-group-item bg-transparent px-0 py-1">
-                                <strong><?= $rec['course_id'] ?>:</strong> <?= htmlspecialchars($rec['title']) ?>
+                                <strong><?= htmlspecialchars($rec['course_id']) ?>:</strong> <?= htmlspecialchars($rec['title']) ?>
                             </li>
                         <?php endforeach; ?>
                     <?php else: ?>
