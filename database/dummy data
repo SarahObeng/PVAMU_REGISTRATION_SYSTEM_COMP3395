@@ -1,73 +1,116 @@
 -- =========================
--- MAJOR
+-- MAJOR (10 entries)
 -- =========================
 INSERT INTO Major (major_id, major_name, degree_type, total_credits_required) VALUES
 (1, 'Computer Science', 'BS', 120),
 (2, 'Mathematics', 'BS', 120),
-(3, 'Biology', 'BS', 120);
+(3, 'Biology', 'BS', 120),
+(4, 'Physics', 'BS', 120),
+(5, 'Chemistry', 'BS', 120),
+(6, 'Data Science', 'BS', 120),
+(7, 'Engineering', 'BS', 128),
+(8, 'Psychology', 'BA', 120),
+(9, 'Business Administration', 'BBA', 120),
+(10, 'Information Technology', 'BS', 120);
 
 -- =========================
--- STUDENT (6 entries)
+-- STUDENT (12 entries)
 -- =========================
-INSERT INTO Student (student_id, first_name, last_name, email, classification, graduation_year, graduation_month, major_id, total_credits_completed) VALUES
+INSERT INTO Student VALUES
 (101, 'India', 'Hoover', 'india.hoover@email.com', 'Senior', 2026, 'May', 1, 105),
 (102, 'Sarah', 'Obeng', 'sarah.obeng@email.com', 'Junior', 2027, 'May', 1, 75),
 (103, 'Raylen', 'Williams', 'raylen.w@email.com', 'Senior', 2026, 'December', 2, 110),
 (104, 'James', 'Carter', 'james.c@email.com', 'Sophomore', 2028, 'May', 3, 45),
 (105, 'Kaitlyn', 'Smith', 'kaitlyn.s@email.com', 'Senior', 2026, 'May', 1, 98),
-(106, 'Denise', 'Williams', 'denise.w@email.com', 'Freshman', 2029, 'May', 2, 15);
+(106, 'Denise', 'Williams', 'denise.w@email.com', 'Freshman', 2029, 'May', 2, 15),
+(107, 'Michael', 'Brown', 'michael.b@email.com', 'Junior', 2027, 'December', 4, 80),
+(108, 'Ashley', 'Davis', 'ashley.d@email.com', 'Sophomore', 2028, 'May', 5, 50),
+(109, 'Joshua', 'Wilson', 'josh.w@email.com', 'Senior', 2026, 'May', 6, 100),
+(110, 'Emily', 'Johnson', 'emily.j@email.com', 'Freshman', 2029, 'May', 7, 12),
+(111, 'Daniel', 'Martinez', 'daniel.m@email.com', 'Junior', 2027, 'May', 8, 78),
+(112, 'Olivia', 'Garcia', 'olivia.g@email.com', 'Sophomore', 2028, 'December', 9, 55);
 
 -- =========================
--- COURSE (6 entries)
+-- COURSE (12 entries)
 -- =========================
-INSERT INTO Course (course_id, course_code, course_name, credit_hours, department) VALUES
+INSERT INTO Course VALUES
 (201, 'COMP3395', 'Database Systems', 3, 'Computer Science'),
 (202, 'COMP2336', 'Data Structures', 3, 'Computer Science'),
 (203, 'MATH2414', 'Calculus II', 4, 'Mathematics'),
 (204, 'BIOL1306', 'General Biology', 4, 'Biology'),
 (205, 'COMP1315', 'Intro to Programming', 3, 'Computer Science'),
-(206, 'MATH1314', 'College Algebra', 3, 'Mathematics');
+(206, 'MATH1314', 'College Algebra', 3, 'Mathematics'),
+(207, 'PHYS2325', 'Physics I', 4, 'Physics'),
+(208, 'CHEM1311', 'General Chemistry', 4, 'Chemistry'),
+(209, 'DS3300', 'Intro to Data Science', 3, 'Data Science'),
+(210, 'IT2300', 'Networking Fundamentals', 3, 'IT'),
+(211, 'PSYC1301', 'Intro to Psychology', 3, 'Psychology'),
+(212, 'BUSI2305', 'Business Statistics', 3, 'Business');
 
 -- =========================
--- SECTION (6 entries)
+-- SECTION (12 entries)
 -- =========================
-INSERT INTO Section (section_id, course_id, semester, year, capacity, enrolled_count) VALUES
-(301, 201, 'Spring', 2026, 2, 2), -- FULL
+INSERT INTO Section VALUES
+(301, 201, 'Spring', 2026, 2, 2),
 (302, 202, 'Spring', 2026, 3, 2),
 (303, 203, 'Spring', 2026, 2, 1),
 (304, 204, 'Spring', 2026, 3, 1),
-(305, 205, 'Spring', 2026, 3, 3), -- FULL
-(306, 206, 'Spring', 2026, 2, 1);
+(305, 205, 'Spring', 2026, 3, 3),
+(306, 206, 'Spring', 2026, 2, 1),
+(307, 207, 'Spring', 2026, 3, 2),
+(308, 208, 'Spring', 2026, 3, 1),
+(309, 209, 'Spring', 2026, 2, 2),
+(310, 210, 'Spring', 2026, 3, 1),
+(311, 211, 'Spring', 2026, 3, 2),
+(312, 212, 'Spring', 2026, 2, 1);
 
 -- =========================
--- ENROLLMENT (6 entries)
+-- ENROLLMENT (12 entries)
 -- =========================
-INSERT INTO Enrollment (enrollment_id, student_id, section_id, enrollment_status, grade) VALUES
+INSERT INTO Enrollment VALUES
 (401, 101, 301, 'Enrolled', 'A'),
 (402, 102, 301, 'Enrolled', 'B'),
 (403, 103, 302, 'Enrolled', NULL),
 (404, 104, 304, 'Enrolled', NULL),
 (405, 105, 305, 'Enrolled', 'A'),
-(406, 106, 306, 'Enrolled', NULL);
+(406, 106, 306, 'Enrolled', NULL),
+(407, 107, 307, 'Enrolled', 'B'),
+(408, 108, 308, 'Enrolled', NULL),
+(409, 109, 309, 'Enrolled', 'A'),
+(410, 110, 310, 'Enrolled', NULL),
+(411, 111, 311, 'Enrolled', 'B'),
+(412, 112, 312, 'Enrolled', NULL);
 
 -- =========================
--- WAITLIST (6 entries)
+-- WAITLIST (12 entries)
 -- =========================
-INSERT INTO Waitlist (waitlist_id, student_id, section_id, priority_score, position, timestamp_joined) VALUES
+INSERT INTO Waitlist VALUES
 (501, 105, 301, 95, 1, '2026-03-30 10:00:00'),
 (502, 103, 301, 90, 2, '2026-03-30 10:05:00'),
 (503, 102, 305, 85, 1, '2026-03-30 11:00:00'),
 (504, 101, 305, 92, 2, '2026-03-30 11:10:00'),
 (505, 106, 301, 70, 3, '2026-03-30 11:20:00'),
-(506, 104, 305, 60, 3, '2026-03-30 11:30:00');
+(506, 104, 305, 60, 3, '2026-03-30 11:30:00'),
+(507, 107, 309, 88, 1, '2026-03-30 12:00:00'),
+(508, 108, 309, 82, 2, '2026-03-30 12:10:00'),
+(509, 109, 305, 91, 4, '2026-03-30 12:20:00'),
+(510, 110, 301, 65, 4, '2026-03-30 12:30:00'),
+(511, 111, 307, 89, 1, '2026-03-30 12:40:00'),
+(512, 112, 308, 75, 2, '2026-03-30 12:50:00');
 
 -- =========================
--- DEGREE PLAN (6 entries)
+-- DEGREE PLAN (12 entries)
 -- =========================
-INSERT INTO DegreePlan (degreeplan_id, major_id, course_id, required_flag, recommended_semester) VALUES
+INSERT INTO DegreePlan VALUES
 (601, 1, 201, TRUE, 6),
 (602, 1, 202, TRUE, 4),
 (603, 1, 205, TRUE, 1),
-(604, 2, 203, TRUE, 3),
-(605, 2, 206, TRUE, 1),
-(606, 3, 204, TRUE, 1);
+(604, 1, 209, FALSE, 5),
+(605, 2, 203, TRUE, 3),
+(606, 2, 206, TRUE, 1),
+(607, 2, 202, FALSE, 4),
+(608, 3, 204, TRUE, 1),
+(609, 3, 203, FALSE, 2),
+(610, 4, 207, TRUE, 2),
+(611, 5, 208, TRUE, 1),
+(612, 6, 209, TRUE, 3);
